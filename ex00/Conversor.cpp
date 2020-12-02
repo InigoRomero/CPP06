@@ -6,26 +6,36 @@ Conversor::Conversor()
     _float(0),
     _char(0),
     _double(0),
-    _src("")
+    _src()
 {}
 
-Conversor::Conversor(std::string const &src)
+Conversor::Conversor(char *src)
 :
 	_int(0),
     _float(0),
     _char(0),
-    _double(0),
     _src(src)
-{}
+{
+    this->_double = atof(this->_src);
+}
 
 Conversor::Conversor(Conversor const &copy)
 :
 	_int(copy._int),
     _float(copy._float),
     _char(copy._char),
-    _double(copy._double),
     _src(copy._src)
-{}
+{
+    std::string nan = "nan";
+    try
+    {
+        this->_double = atof(new char[nan.length() + 1]);
+    }
+    catch (std::invalid_argument) {
+        this->_double = atof("nan");
+        this->_src = new char[nan.length() + 1];
+    }
+}
 
 Conversor::~Conversor(){}
 
@@ -39,22 +49,52 @@ Conversor &Conversor::operator=(Conversor const &op)
 	return (*this);
 }
 
+std::ostream    &operator<<(std::ostream & out, const Conversor & Conversor)
+{
+    //char
+    if (!strcmp(Conversor.getSrc(), "nan"))
+        out << "[+]char: impossible";
+    else if(Conversor.getInt() <= 32)
+        out << "[+]char: Non displayable";
+    else
+        out << "[+]char: '" << Conversor.getChar() << "'";
+    //int
+    if (!strcmp(Conversor.getSrc(), "nan"))
+        out << "\n[+]int: impossible";
+    else
+        out << "\n[+]int: " << Conversor.getInt();
+    //float
+    if (Conversor.getFloat() == Conversor.getInt())
+        out << "\n[+]Float: " << Conversor.getFloat() << ".0f";
+    else
+        out << "\n[+]float: " << Conversor.getFloat()  << "f";
+    //double
+    if (Conversor.getDouble() == Conversor.getInt())
+        out << "\n[+]Double: " << Conversor.getDouble() << ".0";
+    else
+        out << "\n[+]Double: " << Conversor.getDouble();
+    return (out);
+}
+
 //conversions
 void Conversor::toInt()
 {
-    this->_int = 0;
+    this->_int = static_cast<int>(this->_double);
 } 
 void Conversor::toFloat()  
 {
-    this->_float = 0;
+    this->_float = static_cast<float>(this->_double);
 } 
 void Conversor::toChar()  
 {
-    this->_char = 0;
+     this->_char = static_cast<char>(this->_double);
 } 
-void Conversor::toDouble()  
+
+void Conversor::toAll()  
 {
-    this->_double = 0;
+    toInt();
+    toFloat();
+    toChar();
 } 
 
 // Getter - Setter
@@ -62,7 +102,7 @@ int Conversor::getInt() const {return(this->_int);}
 float Conversor::getFloat() const {return(this->_float);} 
 char Conversor::getChar() const {return(this->_char);} 
 double Conversor::getDouble() const {return(this->_double);} 
-std::string Conversor::getSrc() const {return(this->_src);} 
+char* Conversor::getSrc() const {return(this->_src);} 
 
 //exceptions
 const char* Conversor::SomeException::what() const throw()

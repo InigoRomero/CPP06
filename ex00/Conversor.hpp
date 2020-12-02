@@ -4,7 +4,7 @@
 
 # include <string>
 # include <fstream>
-
+# include <math.h>
 class Conversor
 {
 	private:
@@ -12,11 +12,11 @@ class Conversor
         float _float;
         char _char;
         double _double;
-        std::string _src;
+        char *_src;
 
 	public:
         Conversor();
-		Conversor(std::string const &src);
+		Conversor(char *src);
 		Conversor(Conversor const &copy);
 		virtual ~Conversor();
 		Conversor &operator=(Conversor const &op);
@@ -26,18 +26,20 @@ class Conversor
         float        getFloat() const;
         char         getChar() const;
         double       getDouble() const;
-        std::string  getSrc() const;
+        char*  getSrc() const;
 
         //conversions
         void         toInt();
         void         toFloat();
         void         toChar();
-        void         toDouble();
+        void         toAll();
 
         //exceptions
         class SomeException: public std::exception {
 		    virtual const char* what() const throw();
 	    };
 };
+
+std::ostream    &operator<<(std::ostream & out, const Conversor & Conversor);
 
 #endif
