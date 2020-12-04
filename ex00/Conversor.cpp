@@ -16,7 +16,21 @@ Conversor::Conversor(char *src)
     _char(0),
     _src(src)
 {
-    this->_double = atof(this->_src);
+    std::string nan = "nan";
+    if (isdigit(src[0]))
+    {
+        try
+        {
+            this->_double = atof(new char[nan.length() + 1]);
+        }
+        catch (std::invalid_argument) {
+            this->_double = atof("nan");
+            this->_src = new char[nan.length() + 1];
+        }
+        toAll();
+    }
+    else
+        this->_char = src[0];
 }
 
 Conversor::Conversor(Conversor const &copy)
@@ -24,18 +38,9 @@ Conversor::Conversor(Conversor const &copy)
 	_int(copy._int),
     _float(copy._float),
     _char(copy._char),
+    _double(copy._double),
     _src(copy._src)
-{
-    std::string nan = "nan";
-    try
-    {
-        this->_double = atof(new char[nan.length() + 1]);
-    }
-    catch (std::invalid_argument) {
-        this->_double = atof("nan");
-        this->_src = new char[nan.length() + 1];
-    }
-}
+{}
 
 Conversor::~Conversor(){}
 
@@ -54,7 +59,7 @@ std::ostream    &operator<<(std::ostream & out, const Conversor & Conversor)
     //char
     if (!strcmp(Conversor.getSrc(), "nan"))
         out << "[+]char: impossible";
-    else if(Conversor.getInt() <= 32)
+    else if(Conversor.getChar() <= 32)
         out << "[+]char: Non displayable";
     else
         out << "[+]char: '" << Conversor.getChar() << "'";
@@ -76,7 +81,8 @@ std::ostream    &operator<<(std::ostream & out, const Conversor & Conversor)
     return (out);
 }
 
-//conversions
+//conversions En general, se usa static_cast cuando se desea convertir tipos de datos numéricos, como las enumeraciones, a ints o ints en valores Float...
+//https://docs.microsoft.com/es-es/cpp/cpp/static-cast-operator?view=msvc-160
 void Conversor::toInt()
 {
     this->_int = static_cast<int>(this->_double);

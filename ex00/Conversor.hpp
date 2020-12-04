@@ -5,6 +5,8 @@
 # include <string>
 # include <fstream>
 # include <math.h>
+# include <iostream>
+
 class Conversor
 {
 	private:
