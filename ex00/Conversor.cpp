@@ -13,15 +13,14 @@ Conversor::Conversor(char *src)
 :
 	_int(0),
     _float(0),
-    _char(0),
-    _src(src)
+    _char(0)
 {
     std::string nan = "nan";
     if (isdigit(src[0]))
     {
         try
         {
-            this->_double = atof(new char[nan.length() + 1]);
+            this->_double = atof(src);
         }
         catch (std::invalid_argument) {
             this->_double = atof("nan");
@@ -31,6 +30,9 @@ Conversor::Conversor(char *src)
     }
     else
         this->_char = src[0];
+    for (int i=0; i<(int)strlen(src); i++)
+        src[i] = tolower(src[i]);
+    this->_src = src;
 }
 
 Conversor::Conversor(Conversor const &copy)
