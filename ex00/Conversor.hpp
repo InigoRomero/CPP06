@@ -2,10 +2,11 @@
 #ifndef CONVERSOR_HPP
 # define CONVERSOR_HPP
 
-# include <string>
+# include <string.h>
 # include <fstream>
 # include <math.h>
 # include <iostream>
+# include <limits>
 
 class Conversor
 {
